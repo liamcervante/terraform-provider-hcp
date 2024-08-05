@@ -101,7 +101,7 @@ func GetRotatingSecretState(ctx context.Context, client *Client, loc *sharedmode
 
 // CreateMongoDBAtlasRotationIntegration NOTE: currently just needed for tests
 func CreateMongoDBAtlasRotationIntegration(ctx context.Context, client *Client, loc *sharedmodels.HashicorpCloudLocationLocation, integrationName, mongodbAtlasPublicKey, mongodbAtlasPrivateKey string) (*secretmodels.Secrets20231128MongoDBAtlasIntegration, error) {
-	body := secret_service.CreateMongoDBAtlasIntegrationBody{
+	body := secretmodels.SecretServiceCreateMongoDBAtlasIntegrationBody{
 		IntegrationName:      integrationName,
 		MongodbAPIPublicKey:  mongodbAtlasPublicKey,
 		MongodbAPIPrivateKey: mongodbAtlasPrivateKey,
@@ -109,7 +109,7 @@ func CreateMongoDBAtlasRotationIntegration(ctx context.Context, client *Client, 
 	params := secret_service.NewCreateMongoDBAtlasIntegrationParamsWithContext(ctx).
 		WithOrganizationID(loc.OrganizationID).
 		WithProjectID(loc.ProjectID).
-		WithBody(body)
+		WithBody(&body)
 
 	resp, err := client.VaultSecretsPreview.CreateMongoDBAtlasIntegration(params, nil)
 	if err != nil {
@@ -140,7 +140,7 @@ func CreateMongoDBAtlasRotatingSecret(
 	client *Client,
 	loc *sharedmodels.HashicorpCloudLocationLocation,
 	appName string,
-	requestBody secret_service.CreateMongoDBAtlasRotatingSecretBody,
+	requestBody *secretmodels.SecretServiceCreateMongoDBAtlasRotatingSecretBody,
 ) (*secretmodels.Secrets20231128CreateMongoDBAtlasRotatingSecretResponse, error) {
 	params := secret_service.NewCreateMongoDBAtlasRotatingSecretParamsWithContext(ctx).
 		WithOrganizationID(loc.OrganizationID).
